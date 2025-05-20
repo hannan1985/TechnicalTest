@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/FlightManagement/FlightManagement.Common/bin/Debug/net8.0
+/FlightManagement/FlightManagement.Common/obj
+/FlightManagement/FlightManagement.Services/bin/Debug/net8.0
+/FlightManagement/FlightManagement.Services/obj
+/FlightManagement/FlightManagement.Test/bin/Debug/net8.0
+/FlightManagement/FlightManagement.Test/obj
+/FlightManagement/FlightManagment/bin/Debug/net8.0
+/FlightManagement/FlightManagment/obj
+/FlightManagement/.vs

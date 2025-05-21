@@ -27,6 +27,10 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IFlightDataService, FlightDataService>();
     services.AddScoped<IFlightScheduleCheckerService, FlightScheduleCheckerService>();
     services.AddControllers();
+
+    // Add Authentication   todo: if needed
+
+    // Add Authorization    todo: if needed
 }
 
 // Method to configure middleware  

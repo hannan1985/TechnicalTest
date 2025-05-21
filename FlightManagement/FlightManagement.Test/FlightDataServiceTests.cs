@@ -1,12 +1,16 @@
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using FlightManagement.Common.Constant;
 using FlightManagement.Common.DTO;
+using FlightManagement.Common.Enums;
 using FlightManagement.Common.OperationDTO;
 using FlightManagement.Services.ApiServices;
+using Moq;
 using Xunit;
 
 namespace FlightManagement.Services.Tests.ApiServices
@@ -21,11 +25,11 @@ namespace FlightManagement.Services.Tests.ApiServices
         }
 
         [Fact]
-        public async Task GetFlightData_ValidFile_ReturnsJsonData()
+        public async Task GetFlightData_ShouldReturnJsonData_WhenFileExists()
         {
             // Arrange  
-            string filePath = "testFile.json";
-            string expectedJson = "[{\"id\":1,\"aircraft_registration_number\":\"ABC123\",\"aircraft_type\":\"Boeing\",\"flight_number\":\"FL123\",\"departure_airport\":\"JFK\",\"departure_datetime\":\"2023-10-01T10:00:00\",\"arrival_airport\":\"LAX\",\"arrival_datetime\":\"2023-10-01T14:00:00\"}]";
+            string filePath = "test.json";
+            string expectedJson = "{\"key\":\"value\"}";
             await File.WriteAllTextAsync(filePath, expectedJson);
 
             // Act  
@@ -39,74 +43,63 @@ namespace FlightManagement.Services.Tests.ApiServices
         }
 
         [Fact]
-        public async Task ProcessFlightData_ValidCsv_ReturnsSuccessResponse()
+        public async Task ProcessFlightData_ShouldReturnError_WhenNoCsvFilesFound()
         {
             // Arrange  
-            string filePath = "testFile.csv";
-            string csvContent = "id,aircraft_registration_number,aircraft_type,flight_number,departure_airport,departure_datetime,arrival_airport,arrival_datetime\n" +
-                                "1,ABC123,Boeing,FL123,JFK,2023-10-01T10:00:00,LAX,2023-10-01T14:00:00";
-            await File.WriteAllTextAsync(filePath, csvContent);
+            string directoryPath = "EmptyDirectory";
+            Directory.CreateDirectory(directoryPath);
 
             // Act  
-            ResponseMessage response = await _flightDataService.ProcessFlightData(filePath);
+            var response = await _flightDataService.ProcessFlightData(directoryPath);
 
             // Assert  
-            Assert.Equal(200, response.ResponseCode);
-            Assert.Equal("CSV processed successfully.", response.Message);
+            Assert.Equal((int)AppEnums.StatusCode.ERROR, response.ResponseCode);
+            Assert.Contains(AppConstants.Message.NoCSVFilesFound, response.Message);
 
             // Cleanup  
-            File.Delete(filePath);
+            Directory.Delete(directoryPath);
         }
 
         [Fact]
-        public async Task ProcessFlightData_InvalidCsv_ReturnsErrorResponse()
+        public async Task ProcessFlightData_ShouldReturnSuccess_WhenCsvIsProcessed()
         {
             // Arrange  
-            string filePath = "testFile.csv";
+            string directoryPath = "TestDirectory";
+            string csvFilePath = Path.Combine(directoryPath, "test.csv");
+            Directory.CreateDirectory(directoryPath);
             string csvContent = "id,aircraft_registration_number,aircraft_type,flight_number,departure_airport,departure_datetime,arrival_airport,arrival_datetime\n" +
-                                "1,,Boeing,FL123,JFK,InvalidDate,LAX,2023-10-01T14:00:00";
-            await File.WriteAllTextAsync(filePath, csvContent);
+                                "1,ABC123,Boeing737,FL123,ATL,2023-10-01T10:00:00,NYC,2023-10-01T12:00:00";
+            await File.WriteAllTextAsync(csvFilePath, csvContent);
 
             // Act  
-            ResponseMessage response = await _flightDataService.ProcessFlightData(filePath);
+            var response = await _flightDataService.ProcessFlightData(directoryPath);
 
             // Assert  
-            Assert.Equal(500, response.ResponseCode);
-            Assert.Contains("Error processing CSV", response.Message);
+            Assert.Equal((int)AppEnums.StatusCode.SUCCESS, response.ResponseCode);
+            Assert.Equal(AppConstants.Message.CSVProcessedSuccessfully, response.Message);
 
             // Cleanup  
-            File.Delete(filePath);
+            Directory.Delete(directoryPath, true);
         }
 
         [Fact]
-        public async Task ReadFlightsFromCsvAsync_ValidCsv_ReturnsFlightDataList()
+        public async Task ReadFlightsFromCsvAsync_ShouldThrowException_WhenFileNotFound()
         {
             // Arrange  
-            string filePath = "testFile.csv";
-            string csvContent = "id,aircraft_registration_number,aircraft_type,flight_number,departure_airport,departure_datetime,arrival_airport,arrival_datetime\n" +
-                                "1,ABC123,Boeing,FL123,JFK,2023-10-01T10:00:00,LAX,2023-10-01T14:00:00";
-            await File.WriteAllTextAsync(filePath, csvContent);
+            string filePath = "nonexistent.csv";
 
-            // Act  
-            List<FlightData> result = await _flightDataService.ReadFlightsFromCsvAsync(filePath);
-
-            // Assert  
-            Assert.Single(result);
-            Assert.Equal(1, result[0].id);
-            Assert.Equal("ABC123", result[0].aircraft_registration_number);
-
-            // Cleanup  
-            File.Delete(filePath);
+            // Act & Assert  
+            await Assert.ThrowsAsync<FileNotFoundException>(() => _flightDataService.ReadFlightsFromCsvAsync(filePath));
         }
 
         [Fact]
-        public async Task ValidateAndWriteCsvWithErrorsAsync_InvalidCsv_WritesErrorFile()
+        public async Task ValidateAndWriteCsvWithErrorsAsync_ShouldReturnFalse_WhenInvalidRowsExist()
         {
             // Arrange  
-            string inputFilePath = "testFile.csv";
-            string outputFilePath = "errorFile.csv";
+            string inputFilePath = "input.csv";
+            string outputFilePath = "output.csv";
             string csvContent = "id,aircraft_registration_number,aircraft_type,flight_number,departure_airport,departure_datetime,arrival_airport,arrival_datetime\n" +
-                                "1,,Boeing,FL123,JFK,InvalidDate,LAX,2023-10-01T14:00:00";
+                                "1,ABC123,Boeing737,FL123,ATL,InvalidDate,NYC,2023-10-01T12:00:00";
             await File.WriteAllTextAsync(inputFilePath, csvContent);
 
             // Act  

@@ -1,5 +1,7 @@
 ﻿
+using System.Web.Http.Description;
 using FlightManagement.Common.Constant;
+using FlightManagement.Common.DTO;
 using FlightManagement.Common.Enums;
 using FlightManagement.Common.OperationDTO;
 using FlightManagement.Services.ApiServices;
@@ -23,8 +25,6 @@ namespace FlightManagment.Controllers
         }
 
 
-
-
         [HttpGet("ProcessFlightData")]
         public async Task<ResponseMessage> ProcessFlightData()
         {
@@ -41,7 +41,7 @@ namespace FlightManagment.Controllers
         }
 
 
-        [HttpGet("GetFlightData")]
+        [HttpGet("GetFlightData")]     
         public async Task<string> GetFlightData()
         {
             string fileLocation = Path.Combine(AppContext.BaseDirectory[..AppContext.BaseDirectory.IndexOf("bin")], "jsonData.txt");
@@ -61,6 +61,15 @@ namespace FlightManagment.Controllers
         }
 
 
+        /// <summary>
+        /// Retrieves inconsistent flight data from the JSON file.
+        /// </summary>
+        /// <returns>
+        /// A string containing inconsistent flight data or an error message if the file is not found or an exception occurs.
+        /// </returns>
+        /// <response code="200">Returns the inconsistent flight data.</response>
+        /// <response code="404">JSON file not found for inconsistency check.</response>
+        /// <response code="500">An error occurred while processing the request.</response>
         [HttpGet("GetInconsistentFlights")]
         public async Task<string> GetInconsistentFlights()
         {

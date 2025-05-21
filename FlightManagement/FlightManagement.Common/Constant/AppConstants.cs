@@ -29,6 +29,8 @@ namespace FlightManagement.Common.Constant
             public const string InvalidDepartureDatetime = "Invalid departure datetime";
             public const string MissingArrivalAirport = "Missing arrival airport";
             public const string InvalidArrivalDatetime = "Invalid arrival datetime";
+            public const string NoCSVFilesFound = "No CSV files found in: ";
+
 
         }
     }

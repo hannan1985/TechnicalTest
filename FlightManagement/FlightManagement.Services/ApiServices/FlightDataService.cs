@@ -40,31 +40,44 @@ namespace FlightManagement.Services.ApiServices
         /// <returns>A response message indicating success or failure.</returns>
         public async Task<ResponseMessage> ProcessFlightData(string fileLocation)
         {
-            ResponseMessage objResponseMessage = new ResponseMessage();
-            string fileSaveLocation = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin")) + "jsonData.txt";
+            string fileSaveLocation = Path.Combine(AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin")), "jsonData.txt");
 
             try
             {
-                var csvData = await ReadFlightsFromCsvAsync(fileLocation);
+                var files = Directory.GetFiles(fileLocation, "*.csv", SearchOption.TopDirectoryOnly);
+                if (files.Length == 0)
+                {
+                    return new ResponseMessage
+                    {
+                        ResponseCode = (int)AppEnums.StatusCode.ERROR,
+                        Message = AppConstants.Message.NoCSVFilesFound + fileLocation
+                    };
+                }
 
-                // Convert the list of string arrays to a JSON string
+                //read the first CSV file
+                var csvData = await ReadFlightsFromCsvAsync(files[0]);
+
+                // Convert the list of FlightData to JSON
                 string jsonString = JsonSerializer.Serialize(csvData);
 
-                // Store the JSON string in memory
-                System.IO.File.WriteAllText(fileSaveLocation, jsonString);
+                // Save the JSON string to a file
+                await File.WriteAllTextAsync(fileSaveLocation, jsonString);
 
-                objResponseMessage.ResponseCode = (int)AppEnums.StatusCode.SUCCESS;
-                objResponseMessage.Message = AppConstants.Message.CSVProcessedSuccessfully;
+                return new ResponseMessage
+                {
+                    ResponseCode = (int)AppEnums.StatusCode.SUCCESS,
+                    Message = AppConstants.Message.CSVProcessedSuccessfully
+                };
             }
             catch (Exception ex)
             {
-                objResponseMessage.ResponseCode = (int)AppEnums.StatusCode.ERROR;
-                objResponseMessage.Message = AppConstants.Message.CSVProcessError + ex.Message;
+                return new ResponseMessage
+                {
+                    ResponseCode = (int)AppEnums.StatusCode.ERROR,
+                    Message = AppConstants.Message.CSVProcessError + ex.Message
+                };
             }
-
-            return objResponseMessage;
         }
-
 
         /// <summary>
         /// Reads flight records from a CSV file and returns them as a list of FlightData objects.

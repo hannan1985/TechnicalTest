@@ -15,15 +15,13 @@ namespace FlightManagement.Common.Constant
             public const string InvalidRecordsFound = "This file has invalid records. Moreover, the error message is also mentioned there, Please check ";
             public const string FileLocationNotFoundInConfiguration = "File location not found in configuration.";
             public const string FileLocationNotConfigured = "File location is not configured.";
-            public const string NoJsonDataFoundForInconsistancyCheck = "No jason data found for inconsistancy check";
-            public const string NoJsonDataFound = "No jason data found";
+            public const string NoJsonDataFoundForInconsistancyCheck = "No data found for the inconsistency check";
+            public const string NoJsonDataFound = "No data found";
             public const string CSVFileIsEmpty = "CSV file is empty.";
             public const string UnexpectedError = "An unexpected error occurred.";
             public const string NoInconsistentFlightFound = "No inconsistent flights found.";
-
-
             public const string InvalidColumnCount = "Invalid column count";
-            public const string InvalidId = "Invalid id";
+            public const string InvalidId = "Invalid flight id";
             public const string MissingRegistrationNumber = "Missing registration number";
             public const string MissingAircraftType = "Missing aircraft type";
             public const string MissingFlightNumber = "Missing flight number";

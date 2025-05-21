@@ -3,6 +3,7 @@ using System.Text.Json;
 using FlightManagement.Common.Constant;
 using FlightManagement.Services.ApiServices;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,15 @@ app.Run();
 void ConfigureServices(IServiceCollection services)
 {
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
+    services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Title = "Flight Schedule API",
+            Version = "v1",
+            Description = "API for managing and validating flight data from CSV files.",            
+        });
+    });
     services.AddScoped<IFlightDataService, FlightDataService>();
     services.AddScoped<IFlightScheduleCheckerService, FlightScheduleCheckerService>();
     services.AddControllers();

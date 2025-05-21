@@ -26,6 +26,9 @@ namespace FlightManagment.Controllers
 
 
         [HttpGet("ProcessFlightData")]
+        [ProducesResponseType(typeof(ResponseMessage), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseMessage), StatusCodes.Status500InternalServerError)]
         public async Task<ResponseMessage> ProcessFlightData()
         {
             string? fileLocation = _configuration.GetSection("FileLocation")?.GetSection("csvFileLocation")?.Value;
@@ -41,7 +44,10 @@ namespace FlightManagment.Controllers
         }
 
 
-        [HttpGet("GetFlightData")]     
+        [HttpGet("GetFlightData")]
+        [ProducesResponseType(typeof(FlightData), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<string> GetFlightData()
         {
             string fileLocation = Path.Combine(AppContext.BaseDirectory[..AppContext.BaseDirectory.IndexOf("bin")], "jsonData.txt");
@@ -61,16 +67,11 @@ namespace FlightManagment.Controllers
         }
 
 
-        /// <summary>
-        /// Retrieves inconsistent flight data from the JSON file.
-        /// </summary>
-        /// <returns>
-        /// A string containing inconsistent flight data or an error message if the file is not found or an exception occurs.
-        /// </returns>
-        /// <response code="200">Returns the inconsistent flight data.</response>
-        /// <response code="404">JSON file not found for inconsistency check.</response>
-        /// <response code="500">An error occurred while processing the request.</response>
+
         [HttpGet("GetInconsistentFlights")]
+        [ProducesResponseType(typeof(FlightData), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<string> GetInconsistentFlights()
         {
             try

@@ -1,11 +1,9 @@
-﻿using FlightManagement.Common.Constant;
-using FlightManagement.Common.DTO;
+﻿
+using FlightManagement.Common.Constant;
 using FlightManagement.Common.Enums;
 using FlightManagement.Common.OperationDTO;
 using FlightManagement.Services.ApiServices;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace FlightManagment.Controllers
 {
@@ -24,42 +22,42 @@ namespace FlightManagment.Controllers
             _configuration = configuration;
         }
 
+
+
+
         [HttpGet("ProcessFlightData")]
         public async Task<ResponseMessage> ProcessFlightData()
         {
-            ResponseMessage objResponseMessage = new ResponseMessage();
             string? fileLocation = _configuration.GetSection("FileLocation")?.GetSection("csvFileLocation")?.Value;
-
             if (string.IsNullOrEmpty(fileLocation))
             {
-                objResponseMessage.ResponseCode = (int)AppEnums.StatusCode.ERROR;
-                objResponseMessage.Message = AppConstants.Message.FileLocationNotConfigured;
-                return objResponseMessage;
+                return new ResponseMessage
+                {
+                    ResponseCode = (int)AppEnums.StatusCode.ERROR,
+                    Message = AppConstants.Message.FileLocationNotConfigured
+                };
             }
-
-            objResponseMessage = await _flightDataService.ProcessFlightData(fileLocation);
-            return objResponseMessage;
+            return await _flightDataService.ProcessFlightData(fileLocation);
         }
 
 
         [HttpGet("GetFlightData")]
         public async Task<string> GetFlightData()
         {
-            string finalResult = string.Empty;
-            string fileLocation = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin")) + "jsonData.txt";
+            string fileLocation = Path.Combine(AppContext.BaseDirectory[..AppContext.BaseDirectory.IndexOf("bin")], "jsonData.txt");
+            if (!System.IO.File.Exists(fileLocation))
+            {
+                return AppConstants.Message.NoJsonDataFound;
+            }
+
             try
             {
-                if (!System.IO.File.Exists(fileLocation))
-                    throw new FileNotFoundException(AppConstants.Message.NoJsonDataFound);
-
-                finalResult = await _flightDataService.GetFlightData(fileLocation);
+                return await _flightDataService.GetFlightData(fileLocation);
             }
             catch (Exception ex)
             {
-                finalResult = ex.Message;
+                return ex.Message;
             }
-
-            return finalResult;
         }
 
 
@@ -70,7 +68,9 @@ namespace FlightManagment.Controllers
             {
                 string fileLocation = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin")) + "jsonData.txt";
                 if (!System.IO.File.Exists(fileLocation))
+                {
                     throw new FileNotFoundException(AppConstants.Message.NoJsonDataFoundForInconsistancyCheck);
+                }
 
                 string jsonData = await System.IO.File.ReadAllTextAsync(fileLocation);
                 return await _flightScheduleCheckerService.GetInconsistentFlights(jsonData);

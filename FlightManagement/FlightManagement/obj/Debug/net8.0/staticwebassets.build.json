@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "CEHgWN81PwgZmxEdD3fi4Cv4RczqJDGrmtfOrWEBsTg=",
+  "Source": "FlightManagement",
+  "BasePath": "_content/FlightManagement",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

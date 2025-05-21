@@ -1,0 +1,2 @@
+id,aircraft_registration_number,aircraft_type,flight_number,departure_airport,departure_datetime,arrival_airport,arrival_datetime
+1,ABC123,Boeing737,FL123,ATL,2023-10-01T10:00:00,NYC,2023-10-01T12:00:00

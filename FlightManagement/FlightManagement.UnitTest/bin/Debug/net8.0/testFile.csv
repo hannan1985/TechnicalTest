@@ -1,0 +1,2 @@
+id,aircraft_registration_number,aircraft_type,flight_number,departure_airport,departure_datetime,arrival_airport,arrival_datetime
+1,ABC123,Boeing,FL123,JFK,2023-10-01T10:00:00,LAX,2023-10-01T14:00:00

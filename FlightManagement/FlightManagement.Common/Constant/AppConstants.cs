@@ -19,6 +19,18 @@ namespace FlightManagement.Common.Constant
             public const string NoJsonDataFound = "No jason data found";
             public const string CSVFileIsEmpty = "CSV file is empty.";
             public const string UnexpectedError = "An unexpected error occurred.";
+            public const string NoInconsistentFlightFound = "No inconsistent flights found.";
+
+
+            public const string InvalidColumnCount = "Invalid column count";
+            public const string InvalidId = "Invalid id";
+            public const string MissingRegistrationNumber = "Missing registration number";
+            public const string MissingAircraftType = "Missing aircraft type";
+            public const string MissingFlightNumber = "Missing flight number";
+            public const string MissingDepartureAirport = "Missing departure airport";
+            public const string InvalidDepartureDatetime = "Invalid departure datetime";
+            public const string MissingArrivalAirport = "Missing arrival airport";
+            public const string InvalidArrivalDatetime = "Invalid arrival datetime";
 
         }
     }

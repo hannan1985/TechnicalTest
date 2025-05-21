@@ -174,24 +174,24 @@ namespace FlightManagement.Services.ApiServices
         private string ValidateCsvRow(string[] values)
         {
             if (values.Length != 8)
-                return "Invalid column count";
+                return AppConstants.Message.InvalidColumnCount;
 
             if (!int.TryParse(values[0], out _))
-                return "Invalid id";
+                return AppConstants.Message.InvalidId;
             if (string.IsNullOrWhiteSpace(values[1]))
-                return "Missing registration number";
+                return AppConstants.Message.MissingRegistrationNumber;
             if (string.IsNullOrWhiteSpace(values[2]))
-                return "Missing aircraft type";
+                return AppConstants.Message.MissingAircraftType;
             if (string.IsNullOrWhiteSpace(values[3]))
-                return "Missing flight number";
+                return AppConstants.Message.MissingFlightNumber;
             if (string.IsNullOrWhiteSpace(values[4]))
-                return "Missing departure airport";
+                return AppConstants.Message.MissingDepartureAirport;
             if (!DateTime.TryParse(values[5], out _))
-                return "Invalid departure datetime";
+                return AppConstants.Message.InvalidDepartureDatetime;
             if (string.IsNullOrWhiteSpace(values[6]))
-                return "Missing arrival airport";
+                return AppConstants.Message.MissingArrivalAirport;
             if (!DateTime.TryParse(values[7], out _))
-                return "Invalid arrival datetime";
+                return AppConstants.Message.InvalidArrivalDatetime;
 
             return ""; // No error
         }

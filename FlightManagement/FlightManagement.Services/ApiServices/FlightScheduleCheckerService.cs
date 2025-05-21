@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlightManagement.Common.Constant;
 using FlightManagement.Common.DTO;
 using Newtonsoft.Json;
 
@@ -13,7 +14,6 @@ namespace FlightManagement.Services.ApiServices
     /// </summary>
     public class FlightScheduleCheckerService : IFlightScheduleCheckerService
     {
-
         /// <summary>
         /// Analyzes flight data for schedule inconsistencies based on mismatches 
         /// between arrival and subsequent departure airports for the same flight number.
@@ -30,12 +30,11 @@ namespace FlightManagement.Services.ApiServices
                                          .ToList();
 
 
-
             List<string> lstFlightNumber = lstFlightData.Select(f => f.flight_number).Distinct().ToList();
             List<FlightData> lstInconsistencies = new();
             foreach (var flightNumber in lstFlightNumber)
             {
-                var lstSpecificFlights = lstFlightData.Where(f => f.flight_number == flightNumber).OrderBy(f => f.departure_datetime).ToList();
+                var lstSpecificFlights = lstFlightData.Where(f => f.flight_number == flightNumber).ToList();
                 FlightData? previousFlight = null;
 
                 foreach (var flight in lstSpecificFlights)
@@ -59,7 +58,7 @@ namespace FlightManagement.Services.ApiServices
             }
             else
             {
-                finalMessage = "No inconsistent flights found.";
+                finalMessage = AppConstants.Message.NoInconsistentFlightFound;
             }
 
 

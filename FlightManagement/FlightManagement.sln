@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightManagement.Common", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightManagement.Services", "FlightManagement.Services\FlightManagement.Services.csproj", "{F4E7FC26-858C-4DBE-A288-7D7B07D13347}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightManagment", "FlightManagment\FlightManagment.csproj", "{2A0AFCF9-6818-4DE0-A282-BE3E79FCE914}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightManagement", "FlightManagment\FlightManagement.csproj", "{2A0AFCF9-6818-4DE0-A282-BE3E79FCE914}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightManagement.Test", "FlightManagement.Test\FlightManagement.Test.csproj", "{C1EE7CD0-E81A-4F11-BA05-F652995032BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightManagement.UnitTest", "FlightManagement.Test\FlightManagement.UnitTest.csproj", "{C1EE7CD0-E81A-4F11-BA05-F652995032BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

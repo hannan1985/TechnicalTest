@@ -28,7 +28,7 @@ void ConfigureServices(IServiceCollection services)
     {
         c.SwaggerDoc("v1", new OpenApiInfo
         {
-            Title = "Flight Schedule API",
+            Title = "Flight Management API",
             Version = "v1",
             Description = "API for managing and validating flight data from CSV files.",            
         });
